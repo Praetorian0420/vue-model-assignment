@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Shelf | Vue Filterable List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            background: #f4f7fb;
+        }
+
+        .hero-panel {
+            background: linear-gradient(135deg, #173f5f, #20639b);
+        }
+
+        .movie-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.75rem 1.5rem rgba(23, 63, 95, 0.15) !important;
+        }
+
+        .rating {
+            color: #f0a202;
+        }
+    </style>
+</head>
+<body>
+    <main id="app" class="container py-4 py-md-5">
+            <section class="hero-panel rounded-4 text-white p-4 p-md-5 mb-4 shadow-sm">
+                <p class="text-uppercase fw-semibold small mb-2 opacity-75">Vue 3 movie shelf</p>
+                <h1 class="display-5 fw-bold mb-2">Find your next favorite film.</h1>
+                <p class="lead mb-0 opacity-75">Search the collection or narrow it by genre.</p>
+            </section>
+
+        <section class="bg-white rounded-4 p-3 p-md-4 mb-4 shadow-sm" aria-label="Movie filters">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-7">
+                    <label for="movie-search" class="form-label fw-semibold">Search movies</label>
+                    <input
+                        id="movie-search"
+                        v-model="searchTerm"
+                        type="search"
+                        class="form-control form-control-lg"
+                        placeholder="Try a title or description..."
+                    >
+                </div>
+                <div class="col-md-5">
+                    <label for="genre-filter" class="form-label fw-semibold">Genre</label>
+                    <select id="genre-filter" v-model="selectedGenre" class="form-select form-select-lg">
+                        <option value="All">All genres</option>
+                        <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0">Movie collection</h2>
+            <span class="badge text-bg-primary rounded-pill">{{ filteredMovies.length }} results</span>
+        </div>
+
+        <section v-if="filteredMovies.length" class="row g-4" aria-live="polite">
+            <article v-for="movie in filteredMovies" :key="movie.id" class="col-md-6 col-xl-4">
+                <div class="movie-card card h-100 border-0 shadow-sm">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="d-flex justify-content-between gap-3 align-items-start mb-3">
+                            <span class="badge text-bg-light border">{{ movie.genre }}</span>
+                            <span class="rating fw-semibold">&#9733; {{ movie.rating }}</span>
+                        </div>
+                        <h3 class="h5 card-title">{{ movie.title }}</h3>
+                        <p class="card-text text-secondary flex-grow-1">{{ movie.description }}</p>
+                        <div class="d-flex justify-content-between text-secondary small pt-3 border-top">
+                            <span>{{ movie.year }}</span>
+                            <span>{{ movie.runtime }} min</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <div v-else class="alert alert-warning shadow-sm" role="status">
+            No movies match those filters. Try another search.
+        </div>
+    </main>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    searchTerm: '',
+                    selectedGenre: 'All',
+                    movies: [
+                        { id: 1, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, runtime: 99, rating: '8.1', description: 'A hotel concierge and his lobby boy become caught up in a colorful European adventure.' },
+                        { id: 2, title: 'Spider-Man: Into the Spider-Verse', genre: 'Action', year: 2018, runtime: 117, rating: '8.4', description: 'Miles Morales discovers a web of heroes from different dimensions.' },
+                        { id: 3, title: 'Arrival', genre: 'Science Fiction', year: 2016, runtime: 116, rating: '7.9', description: 'A linguist races to understand mysterious visitors before fear takes over.' },
+                        { id: 4, title: 'Hidden Figures', genre: 'Drama', year: 2016, runtime: 127, rating: '7.8', description: 'Three brilliant mathematicians help launch a historic mission into orbit.' },
+                        { id: 5, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, runtime: 120, rating: '8.1', description: 'A fearless road warrior joins a daring escape across a desolate wasteland.' },
+                        { id: 6, title: 'Kiki\'s Delivery Service', genre: 'Animation', year: 1989, runtime: 103, rating: '7.8', description: 'A young witch finds confidence and community while starting a delivery service.' }
+                    ]
+                }
+            },
+            computed: {
+                genres() {
+                    return [...new Set(this.movies.map(movie => movie.genre))].sort()
+                },
+                filteredMovies() {
+                    const search = this.searchTerm.trim().toLowerCase()
+                    return this.movies.filter(movie => {
+                        const matchesGenre = this.selectedGenre === 'All' || movie.genre === this.selectedGenre
+                        const searchableText = `${movie.title} ${movie.description}`.toLowerCase()
+                        return matchesGenre && searchableText.includes(search)
+                    })
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

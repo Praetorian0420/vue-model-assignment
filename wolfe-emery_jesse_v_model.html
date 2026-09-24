@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue v-model Component</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background: #f5f5f5;
+        }
+        #app {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.7rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <custom-input v-model="message"></custom-input>
+        <p>Current Value: {{ message }}</p>
+    </div>
+
+    <script>
+        const CustomInput = {
+            props: {
+                modelValue: {
+                    type: String,
+                    default: ''
+                }
+            },
+            emits: ['update:modelValue'],
+            template: `
+                <div>
+                    <label for="custom-input">Enter text:</label>
+                    <input
+                        id="custom-input"
+                        type="text"
+                        :value="modelValue"
+                        @input="$emit('update:modelValue', $event.target.value)"
+                    >
+                </div>
+            `
+        };
+
+        Vue.createApp({
+            components: {
+                CustomInput
+            },
+            data() {
+                return {
+                    message: ''
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

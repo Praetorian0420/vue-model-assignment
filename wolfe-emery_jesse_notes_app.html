@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef6ff 0%, #f5f3ff 45%, #fff7ed 100%);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #app {
+            max-width: 760px;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .app-shell {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 26px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+            padding: 2rem;
+        }
+
+        .app-title {
+            font-size: clamp(2.1rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.96));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .note-input {
+            border-radius: 12px;
+            border: 1px solid #dbeafe;
+            padding: 0.9rem 1rem;
+            box-shadow: inset 0 1px 2px rgba(148, 163, 184, 0.08);
+        }
+
+        .note-input:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 0.22rem rgba(96, 165, 250, 0.18);
+        }
+
+        .primary-btn {
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            font-weight: 700;
+            padding: 0.78rem 1rem;
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.28);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 28px rgba(99, 102, 241, 0.32);
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .count-chip {
+            display: inline-block;
+            background: linear-gradient(135deg, #dbeafe, #ede9fe);
+            color: #3730a3;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.5rem 0.8rem;
+        }
+
+        .note-item {
+            border: 1px solid rgba(203, 213, 225, 0.9);
+            border-radius: 14px;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            box-shadow: 0 10px 18px rgba(148, 163, 184, 0.08);
+            margin-bottom: 0.75rem;
+            padding: 0.9rem 1rem !important;
+        }
+
+        .note-text {
+            color: #1f2937;
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        .delete-btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.5rem 0.8rem;
+        }
+
+        .empty-state {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            color: #64748b;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 0;
+        }
+    </style>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div class="app-shell">
+            <h1 class="app-title has-text-centered">My Notes App</h1>
+
+            <div class="card p-4 feature-card mb-4">
+                <label class="label has-text-weight-bold">Enter a Note:</label>
+                <input
+                    type="text"
+                    class="input note-input mb-3"
+                    v-model="newNote"
+                    placeholder="Type your note here..."
+                >
+
+                <button type="button" class="button is-fullwidth primary-btn" @click="addNote">
+                    Add Note
+                </button>
+            </div>
+
+            <div class="card p-4 feature-card">
+                <div class="notes-header">
+                    <h3 class="title is-5 mb-0">Your Notes</h3>
+                    <span class="count-chip">{{ notes.length }} items</span>
+                </div>
+
+                <p v-if="notes.length === 0" class="empty-state">No notes yet. Add one to get started!</p>
+
+                <ul v-else class="list is-none">
+                    <li
+                        class="note-item is-flex is-justify-content-space-between is-align-items-center"
+                        v-for="(note, index) in notes"
+                        :key="index"
+                    >
+                        <span class="note-text">{{ note }}</span>
+
+                        <button type="button" class="button is-small is-danger delete-btn" @click="deleteNote(index)">
+                            Delete
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    newNote: "",
+                    notes: []
+                };
+            },
+            methods: {
+                addNote() {
+                    if (this.newNote.trim() !== "") {
+                        this.notes.push(this.newNote.trim());
+                        this.newNote = "";
+                    }
+                },
+                deleteNote(index) {
+                    this.notes.splice(index, 1);
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
