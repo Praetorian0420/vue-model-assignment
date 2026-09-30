@@ -1,0 +1,7 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/wolfe-emery_jesse_v_model.html"
+  status = 200

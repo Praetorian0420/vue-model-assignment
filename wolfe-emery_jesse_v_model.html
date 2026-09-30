@@ -7,14 +7,14 @@
     <script src="https://unpkg.com/vue@3"></script>
     <style>
         :root {
-            --bg-gradient: radial-gradient(ellipse at 50% 38%, #342920 0%, #17191b 42%, #090b0e 100%);
+            --bg-gradient: radial-gradient(ellipse at 50% 38%, #193c38 0%, #17191b 42%, #090b0e 100%);
             --card-bg: rgba(17, 20, 23, 0.94);
-            --primary: #d99a43;
-            --primary-dark: #f0bd69;
+            --primary: #e88763;
+            --primary-dark: #ffc09a;
             --text: #f2eee7;
             --muted: #a8a39a;
-            --border: rgba(223, 173, 101, 0.3);
-            --shadow: 0 28px 80px rgba(0, 0, 0, 0.62), 0 0 70px rgba(193, 124, 47, 0.1);
+            --border: rgba(232, 135, 99, 0.3);
+            --shadow: 0 28px 80px rgba(0, 0, 0, 0.62), 0 0 70px rgba(232, 135, 99, 0.1);
         }
 
         * {
@@ -24,6 +24,7 @@
         body {
             margin: 0;
             min-height: 100vh;
+            min-height: 100svh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -34,7 +35,7 @@
         }
 
         #app {
-            width: min(90vw, 520px);
+            width: min(100%, 520px);
             background: var(--card-bg);
             padding: 2.25rem;
             border-radius: 4px;
@@ -50,7 +51,7 @@
             position: absolute;
             inset: 0 0 auto;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), #f5d08c, var(--primary), transparent);
+            background: linear-gradient(90deg, transparent, var(--primary), #ffd7b8, var(--primary), transparent);
         }
 
         #app::after {
@@ -61,7 +62,7 @@
             right: 12%;
             height: 1px;
             background: rgba(255, 225, 173, 0.16);
-            box-shadow: 0 0 28px 8px rgba(216, 154, 67, 0.09);
+            box-shadow: 0 0 28px 8px rgba(232, 135, 99, 0.09);
             pointer-events: none;
         }
 
@@ -100,15 +101,15 @@
             outline: none;
             border-color: var(--primary);
             background: #121517;
-            box-shadow: 0 0 0 3px rgba(217, 154, 67, 0.12), 0 0 24px rgba(217, 154, 67, 0.08);
+            box-shadow: 0 0 0 3px rgba(232, 135, 99, 0.12), 0 0 24px rgba(232, 135, 99, 0.08);
         }
 
         .value-box {
             margin-top: 1.25rem;
             padding: 1rem 1.1rem;
             border-radius: 3px;
-            background: linear-gradient(110deg, rgba(220, 158, 75, 0.1), rgba(255, 255, 255, 0.015));
-            border: 1px solid rgba(223, 173, 101, 0.22);
+            background: linear-gradient(110deg, rgba(232, 135, 99, 0.1), rgba(255, 255, 255, 0.015));
+            border: 1px solid rgba(232, 135, 99, 0.22);
             font-family: Arial, sans-serif;
             font-size: 0.95rem;
             font-weight: 500;
